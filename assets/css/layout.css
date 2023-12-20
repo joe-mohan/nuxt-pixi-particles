@@ -1,0 +1,5 @@
+@layer components {
+  .container--grid {
+    @apply grid grid-cols-4 gap-x-8 lg:grid-cols-12 lg:gap-x-16;
+  }
+}
