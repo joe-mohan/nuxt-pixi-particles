@@ -22,8 +22,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="">
-    <Loader @loading-done="handleLoadingDone" />
+  <div class="bg-black">
+    <!-- <Loader @loading-done="handleLoadingDone" /> -->
     <slot />
   </div>
 </template>
