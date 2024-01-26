@@ -9,18 +9,16 @@ const canvasRef = ref(null)
 const imgPos = (image, el) => {
     const x = el.getBoundingClientRect().left 
     const y = el.getBoundingClientRect().top
-
     image.x = x
     image.y = y
-
 
     // not sure about this
     const graphics = new Graphics();
     graphics.beginFill(0xFF3300);
     graphics.drawRect(x, y, el.offsetWidth, el.offsetHeight);
     graphics.endFill();
-
     image.mask = graphics;
+    //
 
     return image
 }
@@ -30,7 +28,6 @@ const background = (bgSize, inputSprite, type, forceSize) => {
     const bgContainer = new Container({width: bgSize.x, height: bgSize.y})
     bgContainer.addChild(sprite)
 
-    const self = this
     function resize() {
         let sp = { x: sprite.width, y: sprite.height }
         if (forceSize) sp = forceSize
@@ -132,8 +129,19 @@ onMounted(async () => {
 <template>
     <div ref="mainRef" class="container">
         <canvas ref="canvasRef" class="pointer-events-none fixed inset-0 z-0 h-screen w-screen" />
+
+         <section class="relative z-10 py-128 grid min-h-screen grid-cols-5 gap-4 text-black auto-rows-min">
+            <img class="pixi-img opacity-0 aspect-square object-cover col-span-1" v-for="y in 10" :key="y" :src="`/${y}.jpeg`"/>
+        </section>
+
         <section class="relative z-10 py-128 flex min-h-screen items-center gap-128 flex-wrap justify-center text-black">
             <img class="pixi-img opacity-0 aspect-square object-cover" v-for="y in 10" :key="y" :src="`/${y}.jpeg`"/>
         </section>
+
+        <section class="relative z-10 py-128 flex min-h-screen items-center gap-128 flex-wrap justify-center text-black">
+            <img class="pixi-img opacity-0 aspect-video object-cover" v-for="y in 10" :key="y" :src="`/${y}.jpeg`"/>
+        </section>
+
+       
     </div>
 </template>
