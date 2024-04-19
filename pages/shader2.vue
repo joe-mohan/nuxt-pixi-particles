@@ -130,7 +130,6 @@ onMounted(async () => {
 
   lenis.on("scroll", (e) => {
     $ScrollTrigger.update;
-    console.log(e);
     shader.resources.shaderToyUniforms.uniforms.iScroll =
       -e.animatedScroll * 0.001;
   });
