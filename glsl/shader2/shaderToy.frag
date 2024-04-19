@@ -77,7 +77,7 @@ float log_map(float a, float b, float c, float d, float x) {
 
 
 void main()	{
-    float t = iTime*0.1;
+    float t = iTime*0.01;
 	
     vec2 xy = gl_FragCoord.xy / iResolution.xy  + vec2(0.0, -iScroll);
     float v = horizontal(xy, t);

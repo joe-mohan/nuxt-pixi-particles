@@ -30,19 +30,16 @@ onMounted(async () => {
 
   // Load the textures
   await Assets.load([
-    // "https://pixijs.com/assets/maggot.png",
-    // "https://pixijs.com/assets/pixi-filters/displace.png",
-    "https://s3-us-west-2.amazonaws.com/s.cdpn.io/106114/ripple-03.png?v=1",
-    // "https://pixijs.com/assets/pixi-filters/ring.png",
-    // "https://pixijs.com/assets/bg_grass.jpg",
+    // "https://s3-us-west-2.amazonaws.com/s.cdpn.io/106114/ripple-03.png?v=1",
+    "/DisplacementMap.png",
   ]);
 
   app.stage.eventMode = "static";
 
   // displacement
   const displacementSprite = Sprite.from(
-    // "https://pixijs.com/assets/pixi-filters/displace.png",
-    "https://s3-us-west-2.amazonaws.com/s.cdpn.io/106114/ripple-03.png?v=1",
+    // "https://s3-us-west-2.amazonaws.com/s.cdpn.io/106114/ripple-03.png?v=1",
+    "/DisplacementMap.png",
   );
 
   // Create a displacement filter
@@ -58,19 +55,22 @@ onMounted(async () => {
 
   displacementSprite.anchor.set(0.5);
 
-  app.stage.on("mousemove", onPointerMove).on("touchmove", onPointerMove);
+  displacementSprite.position.set(
+    window.innerWidth / 2,
+    window.innerHeight / 2,
+  );
 
-  function onPointerMove(eventData) {
-    // ring.visible = true;
+  // app.stage.on("mousemove", onPointerMove).on("touchmove", onPointerMove);
 
-    displacementSprite.position.set(
-      eventData.data.global.x - 25,
-      eventData.data.global.y,
-    );
-    // ring.position.copyFrom(displacementSprite.position);
-  }
+  // function onPointerMove(eventData) {
+  //   // ring.visible = true;
 
-  // document.body.appendChild(app.canvas);
+  // displacementSprite.position.set(
+  //   eventData.data.global.x - 25,
+  //   eventData.data.global.y,
+  // );
+  //   // ring.position.copyFrom(displacementSprite.position);
+  // }
 
   const quadGeometry = new Geometry({
     attributes: {
@@ -102,7 +102,6 @@ onMounted(async () => {
         iTime: { value: 0, type: "f32" },
         iScroll: { value: scroll.value * 1.0, type: "f32" },
       },
-      // iScroll: { value: scroll.value * 1.0, type: "float" },
     },
   });
 
@@ -126,7 +125,6 @@ onMounted(async () => {
   const lenis = new Lenis({
     easing: (t) => 1 - Math.pow(1 - t, 4),
   });
-  // lenis.on("scroll", $ScrollTrigger.update);
 
   lenis.on("scroll", (e) => {
     $ScrollTrigger.update;
@@ -139,27 +137,45 @@ onMounted(async () => {
   });
 
   $gsap.ticker.lagSmoothing(0);
-
-  // $Observer.create({
-  //   target: window, // can be any element (selector text is fine)
-  //   type: "wheel,touch", // comma-delimited list of what to listen for
-  //   onUp: (self) => {
-  //     console.log(self.scrollY());
-  //     scroll.value = self.scrollY();
-  //     shader.resources.shaderToyUniforms.uniforms.iScroll = scroll.value * 0.1;
-  //   },
-  //   onDown: (self) => {
-  //     console.log(self.scrollY());
-  //     scroll.value = self.scrollY();
-  //     shader.resources.shaderToyUniforms.uniforms.iScroll = scroll.value * 0.1;
-  //   },
-  // });
 });
 </script>
 
 <template>
   <div class="text-white">
     <div ref="canvasRef" class="fixed inset-0" />
+    <div class="fixed inset-0 opacity-30">
+      <svg
+        viewBox="0 0 300 200"
+        class="h-full w-full"
+        preserveAspectRatio="none"
+      >
+        <filter id="noise" x="0" y="0" width="100%" height="100%">
+          <feTurbulence
+            id="feTurbulence"
+            type="fractalNoise"
+            baseFrequency="2.5"
+            numOctaves="100"
+          >
+            <animate
+              attributeName="seed"
+              from="0"
+              to="100"
+              dur="3s"
+              repeatCount="indefinite"
+            />
+          </feTurbulence>
+          <feBlend in="SourceGraphic" in2="feTurbulence" mode="color-burn" />
+        </filter>
+        <rect
+          x="0"
+          y="0"
+          width="300"
+          height="200"
+          fill="transparent"
+          filter="url(#noise)"
+        />
+      </svg>
+    </div>
     <div class="relative flex h-screen w-screen items-center justify-center">
       <p class="text-2xl">TEXT</p>
     </div>
